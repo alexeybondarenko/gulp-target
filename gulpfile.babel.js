@@ -18,14 +18,23 @@ function getDirectories(srcpath) {
     });
 }
 
-var buildTarget = function (target) {
+var mergePipe = function (target) {
     return lazypipe()
-        .pipe(function () {
-            return target.pipe(); // add merged target and deps to stream
-        })
+        .pipe(target.pipe.bind(target)) // add merged target and deps to stream
         .pipe(function () {
             return gulpIf('config.json', gulpExtend('config.json'))
+        })();
+};
+var buildTarget = function (target) {
+    return lazypipe()
+        // Targets
+        .pipe(function () { // add merged target and deps to stream
+            return target.pipe();
         })
+        .pipe(function () { // special rule for merge
+            return gulpIf('config.json', gulpExtend('config.json'))
+        })
+        // Build process
         .pipe(function () {
             return gulpIf('**/*.{sass,scss}', sass())
         })();
