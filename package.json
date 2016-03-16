@@ -2,7 +2,7 @@
   "name": "onion",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "target.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,6 +11,7 @@
   "dependencies": {
     "gulp": "3.9.1",
     "lazypipe": "1.0.1",
+    "lodash": "4.6.1",
     "vinyl": "1.1.1"
   },
   "devDependencies": {

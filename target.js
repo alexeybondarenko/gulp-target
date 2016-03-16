@@ -4,19 +4,19 @@ var
     lazypipe = require('lazypipe'),
     addSrc = require('gulp-add-src'),
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    _ = require('lodash');
 
 var targetsCache = {}; // common cache of target. to avoid duplicate target loading
 
-function Target (name, options) {
+function Target(name, options) {
     if (!name) {
         throw new Error('target name is required');
     }
 
     options = Object.assign({
         baseDir: './targets',
-        configName: 'target.json',
-        dest: 'dist'
+        configName: 'target.json'
     }, options);
 
     this.name = name;
@@ -37,7 +37,8 @@ function Target (name, options) {
             if (!targetsCache[name]) { //caching
                 targetsCache[name] = new Target(name, options);
             }
-            return targetsCache[name]; // TODO:  add support of complex cross-deps.
+            // TODO: catch circular deps
+            return targetsCache[name];
         }) || [];
 }
 
@@ -57,9 +58,13 @@ Target.prototype.pipe = function () {
  * @returns {Array} array of matcher for files in target and deps
  */
 Target.prototype.sources = function () {
-    return this.__dependencies.concat([this]).map(function (targetObj) {
-        return targetObj.__config.matcher;
-    });
+    return _.uniq(_.flattenDeep(this.__sources()));
+};
+Target.prototype.__sources = function () {
+    return this.__dependencies.map(function (targetObj) {
+        if (!targetObj.__dependencies.length) return targetObj.__config.matcher;
+        return targetObj.__sources();
+    }).concat([this.__config.matcher]);
 };
 
 Target.stream = function (targetName, options) {
