@@ -1,4 +1,5 @@
 {
   "common": false,
-  "targetA": true
+  "targetA": true,
+  "a": "b"
 }
