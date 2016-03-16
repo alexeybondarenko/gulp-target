@@ -18,13 +18,6 @@ function getDirectories(srcpath) {
     });
 }
 
-var mergePipe = function (target) {
-    return lazypipe()
-        .pipe(target.pipe.bind(target)) // add merged target and deps to stream
-        .pipe(function () {
-            return gulpIf('config.json', gulpExtend('config.json'))
-        })();
-};
 var buildTarget = function (target) {
     return lazypipe()
         // Targets
