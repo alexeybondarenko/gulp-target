@@ -15,7 +15,7 @@ function Target(name, options) {
     }
 
     options = Object.assign({
-        baseDir: './targets',
+        baseDir: 'targets',
         configName: 'target.json'
     }, options);
 
@@ -24,10 +24,10 @@ function Target(name, options) {
 
     // store calculated values here
     this.__config = {};
-    this.__config.path = path.join(options.baseDir, name);
+    this.__config.path = path.join(process.cwd(), options.baseDir, name);
     this.__config.matcher = path.join(this.__config.path, '**/*');
 
-    this.config = require('./' + path.join(this.__config.path, options.configName));
+    this.config = require(path.join(this.__config.path, options.configName));
 
     if (!this.config) {
         throw new Error(`target config is required. Add target.json to the '${name}' target`);
