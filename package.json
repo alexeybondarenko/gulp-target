@@ -12,9 +12,7 @@
   "dependencies": {
     "lazypipe": "1.0.1",
     "lodash": "4.6.1",
-    "fs": "0.0.2",
-    "gulp-add-src": "0.2.0",
-    "path": "0.12.7"
+    "gulp-add-src": "0.2.0"
   },
   "devDependencies": {
     "babel-core": "6.7.2",
